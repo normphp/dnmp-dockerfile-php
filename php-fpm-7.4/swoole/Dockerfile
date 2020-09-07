@@ -13,6 +13,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone  
 && apt-get -y install  gcc automake autoconf libtool cmake git  \
         libfreetype6-dev libjpeg62-turbo-dev  \
         openssl libpng-dev  libssl-dev \
+        postgresql-server-dev-11  bzip2 \
 #编译  libzip
 && cd /home/ && curl https://libzip.org/download/libzip-1.5.1.tar.gz >>libzip-1.5.1.tar.gz \
 && tar -zxvf libzip-1.5.1.tar.gz \
@@ -26,6 +27,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone  
 && docker-php-ext-install -j$(nproc) gd \
 && docker-php-ext-install pdo_mysql \
 && docker-php-ext-install opcache \
+&& docker-php-ext-install pdo_pgsql \
 && docker-php-ext-install zip \
 #安装 PECL 拓展，这里我们安装的是Redis ssh2  http://pecl.php.net/get/ssh2-1.2.tgz
 && pecl install igbinary && printf "yes\nyes\n" |  pecl install redis-5.3.1 \

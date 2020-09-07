@@ -12,9 +12,8 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone  
 && apt-get update  \
 && apt-get -y install  gcc automake autoconf libtool cmake git  \
         libfreetype6-dev libjpeg62-turbo-dev  \
-        openssl libpng-dev  libssl-dev \
-        autoconf \
-        iputils-ping net-tools \
+        openssl libpng-dev  libssl-dev bzip2 \
+        postgresql-server-dev-11 \
 #编译  libzip
 && cd /home/ && curl https://libzip.org/download/libzip-1.5.1.tar.gz >>libzip-1.5.1.tar.gz \
 && tar -zxvf libzip-1.5.1.tar.gz \
@@ -27,6 +26,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone  
 && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
 && docker-php-ext-install -j$(nproc) gd \
 && docker-php-ext-install pdo_mysql \
+&& docker-php-ext-install pdo_pgsql \
 && docker-php-ext-install opcache \
 && docker-php-ext-install zip \
 && pecl install igbinary && printf "yes\nyes\n" |  pecl install redis-5.3.1 \
