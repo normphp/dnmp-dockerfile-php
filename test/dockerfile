@@ -1,0 +1,129 @@
+FROM php:7.4-fpm-alpine
+MAINTAINER pizepei "pizepei@pizepei.com"
+ENV TIMEZONE Asia/Shanghai
+
+# COPY ./libzip-1.7.3.tar.gz      /home/libzip-1.7.3.tar.gz
+# COPY ./swoole-4.6.1.tgz         /home/swoole-4.6.1.tgz
+# COPY ./xlswriter-1.3.7.tgz      /home/xlswriter-1.3.7.tgz
+# COPY ./redis-5.3.2.tgz          /home/redis-5.3.2.tgz
+# COPY ./xdebug-3.0.2.tgz         /home/xdebug-3.0.2.tgz
+# COPY ./libssh2-1.9.0.tar.gz     /home/libssh2-1.9.0.tar.gz
+
+RUN  echo -e "\033[5;34m 设置源、设置Asia/Shanghai 安装 shadow \033[0m"  \
+    && cat /etc/alpine-release \
+    && echo "http://mirrors.ustc.edu.cn/alpine/v3.13/main/"        > /etc/apk/repositories \
+    && echo "http://mirrors.ustc.edu.cn/alpine/v3.13/main"         > /etc/apk/repositories  \
+    && echo "http://mirrors.ustc.edu.cn/alpine/v3.13/community"    >> /etc/apk/repositories \
+    && echo "http://mirrors.ustc.edu.cn/alpine/edge/community"     >> /etc/apk/repositories \
+    && echo "http://mirrors.ustc.edu.cn/alpine/edge/testing"       >> /etc/apk/repositories \
+    && cat /etc/apk/repositories \
+    && echo "Asia/Shanghai" > /etc/timezone \
+    && apk add --update --no-cache tzdata shadow \
+    && TZ=Asia/Shanghai \
+    && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+
+#     && echo -e "\033[5;34m COPY libzip-1.7.3.tar.gz     https://libzip.org/download/libzip-1.7.3.tar.gz  \033[0m"  \
+#     && echo -e "\033[5;34m COPY swoole-4.6.1.tgz        https://pecl.php.net/get/swoole-4.6.1.tgz  \033[0m"  \
+#     && echo -e "\033[5;34m COPY xlswriter-1.3.7.tgz     https://pecl.php.net/get/xlswriter-1.3.7.tgz  \033[0m"  \
+#     && echo -e "\033[5;34m COPY redis-5.3.2.tgz         https://pecl.php.net/get/redis-5.3.2.tgz  \033[0m"  \
+#     && echo -e "\033[5;34m COPY xdebug-3.0.2.tgz        https://pecl.php.net/get/xdebug-3.0.2.tgz  \033[0m"  \
+#     && echo -e "\033[5;34m 安装需要的依赖包 \033[0m" \
+    && apk add  --no-cache autoconf cmake make  gcc g++   \
+                                   zlib-dev \
+                                   icu-dev \
+                                   libtool \
+                                   libpq \
+
+#     && echo -e "\033[5;34m pdo pdo_mysql  \033[0m"  \
+#     && docker-php-ext-install   pdo_mysql  \
+#     && echo -e "\033[5;34m pdo  pdo_pgsql \033[0m"  \
+#     && apk add  --update --no-cache postgresql-dev    \
+#     && docker-php-ext-install    pdo_pgsql   \
+
+    && echo -e "\033[5;34m pdo_sqlsrv \033[0m"  \
+    && apk add  --update --no-cache unixodbc-dev  unixodbc          \
+    && docker-php-ext-configure odbc --with-unixODBC=shared,/usr;   \
+    && docker-php-ext-install   odbc \
+    && pecl install             pdo_sqlsrv \
+    && docker-php-ext-enable    pdo_sqlsrv \
+#     && echo -e "\033[5;34m  docker-php-ext-install 安装php 扩展 （常规）  \033[0m" \
+#     && docker-php-ext-install sockets \
+#     && docker-php-ext-install opcache \
+#     && echo -e "\033[5;34m  pecl install 安装php 扩展 （常规）  \033[0m" \
+#     && pecl install             igbinary    \
+#     && docker-php-ext-enable    igbinary    \
+#     && echo -e "\033[5;34m  数学扩展  \033[0m" \
+#     && apk add --update --no-cache gmp-dev \
+#     && docker-php-ext-install intl  bcmath gmp \
+#     && echo -e "\033[5;34m  xlswriter 表格处理 \033[0m" \
+#     && pecl install             /home/xlswriter-1.3.7.tgz  \
+#     && docker-php-ext-enable    xlswriter  \
+#     && echo -e "\033[5;34m  redis  \033[0m" \
+#     && pecl install             redis  \
+#     && docker-php-ext-enable    redis \
+#
+#     && echo -e "\033[5;34m 图像处理 imagick   \033[0m" \
+#     && apk add --update --no-cache   imagemagick  imagemagick-dev \
+#     && pecl install imagick \
+#     && docker-php-ext-enable  imagick \
+#
+#     && echo -e "\033[5;34m 图像处理 gd  \033[0m" \
+#     && apk add --update --no-cache  libpng-dev \
+#                 jpeg-dev \
+#                 freetype-dev \
+#                 libjpeg-turbo-dev \
+#     && echo -e "\033[5;34m 7.2 3   docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \    \033[0m" \
+#     && echo -e "\033[5;34m 7.4     docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ \   \033[0m" \
+#     && docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ \
+#     && docker-php-ext-install -j$(nproc) gd \
+#
+#
+#
+#     && echo -e "\033[5;34m 非必要扩展 SSH2      https://www.libssh2.org/download/libssh2-1.9.0.tar.gz \033[0m" \
+#     && cd /home/ && tar -zxvf libssh2-1.9.0.tar.gz && cd libssh2-1.9.0/  &&  ./configure && make && make install \
+#     && pecl install                 ssh2-1.2 \
+#     && docker-php-ext-enable        ssh2  \
+#
+#     && echo -e "\033[5;34m 非必要扩展 mongodb  \033[0m" \
+#     && pecl install                 mongodb \
+#     && docker-php-ext-enable        mongodb \
+#
+#     && echo -e "\033[5;34m 非必要扩展  \033[0m" \
+#     && pecl install             /home/xdebug-3.0.2.tgz \
+#     && docker-php-ext-enable    xdebug \
+#
+#     && echo -e "\033[5;34m 非必要扩展 swoole  \033[0m" \
+#     && printf "y\y\y" | pecl install      /home/swoole-4.6.1.tgz \
+#     && docker-php-ext-enable   swoole \
+#
+#     && echo -e "\033[5;34m  非必要扩展 文件 ZIP    https://libzip.org/download/libzip-1.7.3.tar.gz \033[0m" \
+#     && apk add --update --no-cache  bzip2-dev bzip2 \
+#     && cd /home/ && tar -zxvf libzip-1.7.3.tar.gz  && cd libzip-1.7.3  && mkdir build  && cd build  && cmake ..  && make && make install \
+#     && export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig/:/usr/local/lib64/pkgconfig/:$PKG_CONFIG_PATH  \
+#     && docker-php-ext-install zip \
+
+    &&  echo -e "\033[5;34m 设置用户id 1000 \033[0m" \
+    && usermod -u 1000 www-data \
+
+    && echo -e "\033[5;34m 删除不需要的文件 \033[0m" \
+    && rm -rf   /home/*   \
+    && echo -e "\033[5;34m 删除不需要的依赖包 \033[0m" \
+    && apk del \
+             autoconf cmake make  gcc g++ zlib-dev libtool \
+#              unixodbc           \
+#              unixodbc-dev       \
+#              postgresql-dev     \
+#              bzip2-dev bzip2    \
+#              imagemagick-dev    \
+
+             shadow             \
+    && echo -e "\033[5;34m 删除不需要的缓存 \033[0m" \
+    && ls -l  /var/cache/apk    \
+    && rm -rf /var/cache/*      \
+    && rm -rf /tmp/pear/temp/*  \
+    &&  echo -e "\033[5;34m 检查ext \033[0m" \
+    && php -m
+
+WORKDIR /data
+
+
