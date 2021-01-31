@@ -1,9 +1,11 @@
 # dnmp-dockerfile-php
 * 各PHP版本的dockerfile构建文件
+
 ## 构建需要的扩展包
 * 由于众所周知的原因，在构建过程中通过命令行下载需要的安装包会非常缓慢，可通过百度云下载需要的文件放在dockerfile同级目录。
     * 链接：https://pan.baidu.com/s/1SGDEHqGZB-NTyqTJV_Rm3A 提取码：norm
     * 非必要可选择性下载：ImageMagick.tar.gz
+    
 ## 基础说明
 * 2021-01-29开始：
     * 不再使用ubuntu基础镜像的php:7.4-fpm官方镜像改为使用alpine基础镜像的官方php:7.4-fpm-alpine，镜像从800M左右缩小为200M左右
@@ -16,10 +18,12 @@
         * full、universal版本的差异主要在php扩展支持不同详情见下一个大标题目录
         * full:安装了90%的常用php组件扩展
         * universal:只在php官方镜像基础上安装 pdo_mysql、redis、xlswriter、gd、OPcache、zip、intl、gmp等常用组件扩展
+    
 ## 各版本组件扩展区别
 *   [PHP8.0-universal] bcmath,Core,ctype,curl,date,dom,fileinfo,filter,ftp,gd,gmp,hash,iconv,igbinary,intl,json,libxml,mbstring,mysqlnd,openssl,pcre,PDO,pdo_mysql,pdo_sqlite,Phar,posix,readline,redis,Reflection,session,SimpleXML,sockets,sodium,SPL,sqlite3,standard,tokenizer,xlswriter,xml,xmlreader,xmlwriter,Zend OPcache,zip,zlib
 *   [PHP7.4-universal] bcmath,Core,ctype,curl,date,dom,fileinfo,filter,ftp,gd,gmp,hash,iconv,igbinary,imagick,intl,json,libxml,mbstring,mysqlnd,openssl,pcre,PDO,pdo_mysql,pdo_pgsql,pdo_sqlite,Phar,posix,readline,redis,Reflection,session,SimpleXML,sockets,sodium,SPL,sqlite3,ssh2,standard,swoole,tokenizer,xdebug,xlswriter,xml,xmlreader,xmlwriter,Zend OPcache,zip,zlib
 *   [PHP7.4-full] bcmath,Core,ctype,curl,date,dom,fileinfo,filter,ftp,gd,gmp,hash,iconv,igbinary,imagick,intl,json,libxml,mbstring,mysqlnd,openssl,pcre,PDO,pdo_mysql,pdo_pgsql,pdo_sqlite,Phar,posix,readline,redis,Reflection,session,SimpleXML,sockets,sodium,SPL,sqlite3,ssh2,standard,swoole,tokenizer,xdebug,xlswriter,xml,xmlreader,xmlwriter,Zend OPcache,zip,zlib
+
 ## 在universal镜像上进行自定义组件扩展
 * 考虑到大部分项目是不需要full镜像那么多组件扩展，您可以在universal的构建dockerfile基础上使用现有的universal镜像自定义构建
     * 在对应php-fpm-[7.4|8.0]\diy\目录中有参考dockerfile（注意下载拷贝安装包文件到目录中）
@@ -44,6 +48,7 @@
         * 构建多架构镜像，并推送到DockerHub（需要先登录）：
             * docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t donhui/multiarch --push .
     * 篇幅有限更多docker 镜像构建知识请自行谷歌、百度
+
 ## alpine操作系统常规知识点
 * 包管理命令
     * 安装包： apk --no-cache add   [包名] 
