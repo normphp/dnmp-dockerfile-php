@@ -60,5 +60,8 @@
         * 如碰到apk --no-cache add 包时提示资源包不存在：
           * 可尝试浏览器打开https://pkgs.alpinelinux.org/packages ，在搜索搜索包名
           * 加入指定的“Branch”和“Repository”的源到http://mirrors.ustc.edu.cn/alpine/[Branch]/[Repository]，就可以apk add(修改加入方法参考php-fpm-7.4\full\dockerfile:15行)
-    
+* 进入容器：
+    *  alpine系统与ubuntu系统命令行不同，shell执行目录为 /bin/sh
+    *  docker exec -it [上一步你自定义的容器名称]  /bin/sh
+    *  docker-compose exec  [SERVICE]  /bin/sh
 * 篇幅有限更多 alpine操作系统常 规知识点请自行谷歌、百度
