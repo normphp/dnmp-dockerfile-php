@@ -17,7 +17,7 @@ RUN  echo -e "\033[5;34m 使用php-fpm-7.4-universal基础镜像进行构建 \03
                                    libtool \
                                    libpq \
                                    bzip2-dev bzip2 \
-
+                                   shadow \
 #     && echo -e "\033[5;34m pdo  pdo_pgsql \033[0m"  \
 #     && apk add  --update --no-cache postgresql-dev    \
 #     && docker-php-ext-install    pdo_pgsql   \
