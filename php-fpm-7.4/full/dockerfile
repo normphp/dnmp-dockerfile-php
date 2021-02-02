@@ -122,7 +122,7 @@ RUN  echo -e "\033[5;34m 设置源、设置Asia/Shanghai 安装 shadow \033[0m" 
     && ls -l  /var/cache/apk    \
     && rm -rf /var/cache/*      \
     && rm -rf /tmp/pear/temp/*  \
-    &&  echo -e "\033[5;34m 检查ext \033[0m" \
+    && echo -e "\033[5;34m 检查ext \033[0m" \
     && php -m
 
 WORKDIR /data
