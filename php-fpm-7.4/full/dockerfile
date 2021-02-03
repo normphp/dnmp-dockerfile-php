@@ -25,11 +25,11 @@ RUN   echo -e "\033[5;34m 设置源、设置Asia/Shanghai 安装 shadow \033[0m"
                                    icu-dev \
                                    libtool \
                                    libpq \
-#     && echo -e "\033[5;34m pdo pdo_mysql  \033[0m"  \
-#     && docker-php-ext-install   pdo_mysql  \
-#     && echo -e "\033[5;34m pdo  pdo_pgsql \033[0m"  \
-#     && apk add  --update --no-cache postgresql-dev    \
-#     && docker-php-ext-install    pdo_pgsql   \
+    && echo -e "\033[5;34m pdo pdo_mysql  \033[0m"  \
+    && docker-php-ext-install   pdo_mysql  \
+    && echo -e "\033[5;34m pdo  pdo_pgsql \033[0m"  \
+    && apk add  --update --no-cache postgresql-dev    \
+    && docker-php-ext-install    pdo_pgsql   \
 
 #     && echo -e "\033[5;34m pdo_sqlsrv \033[0m"  \
 #     && apk add  --update --no-cache unixodbc-dev  unixodbc \
