@@ -2,14 +2,8 @@ FROM php:7.4-fpm-alpine
 MAINTAINER pizepei "pizepei@pizepei.com"
 ENV TIMEZONE Asia/Shanghai
 
-COPY ./libzip-1.7.3.tar.gz      /home/libzip-1.7.3.tar.gz
-COPY ./swoole-4.6.1.tgz         /home/swoole-4.6.1.tgz
-COPY ./xlswriter-1.3.7.tgz      /home/xlswriter-1.3.7.tgz
-COPY ./redis-5.3.2.tgz          /home/redis-5.3.2.tgz
-COPY ./xdebug-3.0.2.tgz         /home/xdebug-3.0.2.tgz
-COPY ./libssh2-1.9.0.tar.gz     /home/libssh2-1.9.0.tar.gz
-COPY ./mongodb-1.9.0.tgz        /home/mongodb-1.9.0.tgz
-RUN  echo -e "\033[5;34m 设置源、设置Asia/Shanghai 安装 shadow \033[0m"  \
+COPY ./package/      /home/package/
+RUN   echo -e "\033[5;34m 设置源、设置Asia/Shanghai 安装 shadow \033[0m"  \
     && cat /etc/alpine-release \
     && echo "\033[5;34m 如依然下载缓慢可尝试替换域名为http://mirrors.ustc.edu.cn \033[0m"  \
     && echo "http://mirrors.ustc.edu.cn/alpine/v3.13/main/"        > /etc/apk/repositories \
@@ -23,23 +17,19 @@ RUN  echo -e "\033[5;34m 设置源、设置Asia/Shanghai 安装 shadow \033[0m" 
     && TZ=Asia/Shanghai \
     && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
 
-    && echo -e "\033[5;34m COPY libzip-1.7.3.tar.gz     https://libzip.org/download/libzip-1.7.3.tar.gz  \033[0m"  \
-    && echo -e "\033[5;34m COPY swoole-4.6.1.tgz        https://pecl.php.net/get/swoole-4.6.1.tgz  \033[0m"  \
-    && echo -e "\033[5;34m COPY xlswriter-1.3.7.tgz     https://pecl.php.net/get/xlswriter-1.3.7.tgz  \033[0m"  \
-    && echo -e "\033[5;34m COPY redis-5.3.2.tgz         https://pecl.php.net/get/redis-5.3.2.tgz  \033[0m"  \
-    && echo -e "\033[5;34m COPY xdebug-3.0.2.tgz        https://pecl.php.net/get/xdebug-3.0.2.tgz  \033[0m"  \
+    && echo -e "\033[5;34m 当前 /home/package/ 文件 \033[0m"  \
+    && ls -l /home/package/  \
     && echo -e "\033[5;34m 安装需要的依赖包 \033[0m" \
     && apk add  --no-cache autoconf cmake make  gcc g++   \
                                    zlib-dev \
                                    icu-dev \
                                    libtool \
                                    libpq \
-
-    && echo -e "\033[5;34m pdo pdo_mysql  \033[0m"  \
-    && docker-php-ext-install   pdo_mysql  \
-    && echo -e "\033[5;34m pdo  pdo_pgsql \033[0m"  \
-    && apk add  --update --no-cache postgresql-dev    \
-    && docker-php-ext-install    pdo_pgsql   \
+#     && echo -e "\033[5;34m pdo pdo_mysql  \033[0m"  \
+#     && docker-php-ext-install   pdo_mysql  \
+#     && echo -e "\033[5;34m pdo  pdo_pgsql \033[0m"  \
+#     && apk add  --update --no-cache postgresql-dev    \
+#     && docker-php-ext-install    pdo_pgsql   \
 
 #     && echo -e "\033[5;34m pdo_sqlsrv \033[0m"  \
 #     && apk add  --update --no-cache unixodbc-dev  unixodbc \
@@ -57,7 +47,7 @@ RUN  echo -e "\033[5;34m 设置源、设置Asia/Shanghai 安装 shadow \033[0m" 
     && apk add --update --no-cache gmp-dev \
     && docker-php-ext-install intl  bcmath gmp \
     && echo -e "\033[5;34m  xlswriter 表格处理 \033[0m" \
-    && pecl install             /home/xlswriter-1.3.7.tgz  \
+    && pecl install             /home/package/xlswriter-1.3.7.tgz  \
     && docker-php-ext-enable    xlswriter  \
     && echo -e "\033[5;34m  redis  \033[0m" \
     && pecl install             redis  \
@@ -81,25 +71,25 @@ RUN  echo -e "\033[5;34m 设置源、设置Asia/Shanghai 安装 shadow \033[0m" 
 
 
     && echo -e "\033[5;34m 非必要扩展 SSH2      https://www.libssh2.org/download/libssh2-1.9.0.tar.gz \033[0m" \
-    && cd /home/ && tar -zxvf libssh2-1.9.0.tar.gz && cd libssh2-1.9.0/  &&  ./configure && make && make install \
+    && cd /home/package/ && tar -zxvf libssh2-1.9.0.tar.gz && cd libssh2-1.9.0/  &&  ./configure && make && make install \
     && pecl install                 ssh2-1.2 \
     && docker-php-ext-enable        ssh2  \
 
     && echo -e "\033[5;34m 非必要扩展 mongodb  \033[0m" \
-    && pecl install                 /home/mongodb-1.9.0.tgz \
+    && pecl install                 /home/package/mongodb-1.9.0.tgz \
     && docker-php-ext-enable        mongodb \
 
     && echo -e "\033[5;34m 非必要扩展  \033[0m" \
-    && pecl install             /home/xdebug-3.0.2.tgz \
+    && pecl install             /home/package/xdebug-3.0.2.tgz \
     && docker-php-ext-enable    xdebug \
 
     && echo -e "\033[5;34m 非必要扩展 swoole  \033[0m" \
-    && printf "y\y\y" | pecl install      /home/swoole-4.6.1.tgz \
+    && printf "y\y\y" | pecl install      /home/package/swoole-4.6.1.tgz \
     && docker-php-ext-enable   swoole \
 
     && echo -e "\033[5;34m  非必要扩展 文件 ZIP    https://libzip.org/download/libzip-1.7.3.tar.gz \033[0m" \
     && apk add --update --no-cache  bzip2-dev bzip2 \
-    && cd /home/ && tar -zxvf libzip-1.7.3.tar.gz  && cd libzip-1.7.3  && mkdir build  && cd build  && cmake ..  && make && make install \
+    && cd /home/package/ && tar -zxvf libzip-1.7.3.tar.gz  && cd libzip-1.7.3  && mkdir build  && cd build  && cmake ..  && make && make install \
     && export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig/:/usr/local/lib64/pkgconfig/:$PKG_CONFIG_PATH  \
     && docker-php-ext-install zip \
 
@@ -107,7 +97,7 @@ RUN  echo -e "\033[5;34m 设置源、设置Asia/Shanghai 安装 shadow \033[0m" 
     && usermod -u 1000 www-data \
 
     && echo -e "\033[5;34m 删除不需要的文件 \033[0m" \
-    && rm -rf   /home/*   \
+    && rm -rf   /home/package/*   \
     && docker-php-source delete \
     && echo -e "\033[5;34m 删除不需要的依赖包 \033[0m" \
     && echo -e "\033[5;34m 注意检查是否安装过，如果删除未安装的包会导致编译构建失败 \033[0m" \
