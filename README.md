@@ -22,7 +22,7 @@
 ## 各版本组件扩展区别
 *   [PHP8.0-universal] bcmath,Core,ctype,curl,date,dom,fileinfo,filter,ftp,gd,gmp,hash,iconv,igbinary,intl,json,libxml,mbstring,mysqlnd,openssl,pcre,PDO,pdo_mysql,pdo_sqlite,Phar,posix,readline,redis,Reflection,session,SimpleXML,sockets,sodium,SPL,sqlite3,standard,tokenizer,xlswriter,xml,xmlreader,xmlwriter,Zend OPcache,zip,zlib
 *   [PHP7.4-universal] bcmath,Core,ctype,curl,date,dom,fileinfo,filter,ftp,gd,gmp,hash,iconv,igbinary,imagick,intl,json,libxml,mbstring,mysqlnd,openssl,pcre,PDO,pdo_mysql,pdo_pgsql,pdo_sqlite,Phar,posix,readline,redis,Reflection,session,SimpleXML,sockets,sodium,SPL,sqlite3,ssh2,standard,swoole,tokenizer,xdebug,xlswriter,xml,xmlreader,xmlwriter,Zend OPcache,zip,zlib
-*   [PHP7.4-full] bcmath,Core,ctype,curl,date,dom,fileinfo,filter,ftp,gd,gmp,hash,iconv,igbinary,imagick,intl,json,libxml,mbstring,mysqlnd,openssl,pcre,PDO,pdo_mysql,pdo_pgsql,pdo_sqlite,Phar,posix,readline,redis,Reflection,session,SimpleXML,sockets,sodium,SPL,sqlite3,ssh2,standard,swoole,tokenizer,xdebug,xlswriter,xml,xmlreader,xmlwriter,Zend OPcache,zip,zlib
+*   [PHP7.4-full] bcmath,Core,ctype,curl,date,dom,fileinfo,filter,ftp,gd,gmp,hash,iconv,igbinary,imagick,intl,json,libxml,mbstring,mysqlnd,openssl,pcre,PDO,pdo_mysql,pdo_pgsql,pdo_sqlite,Phar,posix,readline,redis,Reflection,session,SimpleXML,sockets,sodium,SPL,sqlite3,ssh2,standard,swoole,tokenizer,xdebug,xlswriter,xml,xmlreader,xmlwriter,Zend OPcache,zip,zlib,mongodb
 
 ## 在universal镜像上进行自定义组件扩展
 * 考虑到大部分项目是不需要full镜像那么多组件扩展，您可以在universal的构建dockerfile基础上使用现有的universal镜像自定义构建
