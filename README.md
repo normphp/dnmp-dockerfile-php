@@ -40,9 +40,8 @@
         * 需要docker版本至少 20
         * 查看当前支持的cpu架构：docker buildx ls
         * 我们当前使用的是默认的 builder，它基本上是旧的 builder，让我们创建一个新的 builder，它使我们能够访问一些新的多架构结构功能。
-            * docker buildx create --driver-opt env.BUILDKIT_STEP_LOG_MAX_SIZE=1000000,env.BUILDKIT_STEP_LOG_MAX_SPEED=100000000  --use --name MyBuilder （命令只需要执行一次）
-            * 如出现[output clipped, log limit 1MiB reached] 错误执行：docker buildx create --driver-opt env.BUILDKIT_STEP_LOG_MAX_SIZE=1000000,env.BUILDKIT_STEP_LOG_MAX_SPEED=100000000 --use            
-
+            * docker buildx create   --use --name mybuilder （命令只需要执行一次,提示错误就执行下一条命令）
+            * 如出现[output clipped, log limit 1MiB reached] 错误执行：docker buildx create --driver-opt env.BUILDKIT_STEP_LOG_MAX_SIZE=20000000,env.BUILDKIT_STEP_LOG_MAX_SPEED=2000000000 --use            
         * 更新查看 builder：docker buildx inspect --bootstrap （命令通常只需要执行一次可能需要执行很长时间请耐心等待）
         * 测试构建多架构镜像，不推送到DockerHub ：
             * docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t [你自定义一个镜像名称]  .  （ --platform 参数为上一步命令的结果，可根据需要选择性的删除一些CPU架构，使用的架构越多消耗的性能
